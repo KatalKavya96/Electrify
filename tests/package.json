@@ -4,8 +4,9 @@
   "description": "Integration and unit tests for SD Group Project",
 
   "scripts": {
+    "pretest": "npx prisma generate --schema=../backend/prisma/schema.prisma",
     "test": "jest --verbose",
-    "test:integration": "jest --testPathPattern=backend/integration_tests --verbose"
+    "test:integration": "npx prisma generate --schema=../backend/prisma/schema.prisma && jest --testPathPattern=backend/integration_tests --verbose"
   },
   "devDependencies": {
     "@prisma/client": "^5.22.0",
