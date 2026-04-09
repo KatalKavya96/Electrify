@@ -13,10 +13,13 @@ export const config = {
 };
 
 // Validate required environment variables
-const requiredEnvVars = ['DATABASE_URL'];
+export function validateEnv() {
+  const requiredEnvVars = ['DATABASE_URL'];
 
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    throw new Error(`Missing required environment variable: ${envVar}`);
+  for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+      throw new Error(`Missing required environment variable: ${envVar}`);
+    }
   }
 }
+validateEnv();
