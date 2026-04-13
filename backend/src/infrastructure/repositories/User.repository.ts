@@ -73,7 +73,7 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async create(data: Omit<RegisterUserdto, "govtId"> & { govtId: string }): Promise<UserEntity> {
+  async create(data: Omit<RegisterUserdto, "govtId"> & { govtId: string, refreshToken: string }): Promise<UserEntity> {
     const user = await this.prisma.user.create({
       data: {
         user_id: crypto.randomUUID(),
@@ -84,6 +84,7 @@ export class UserRepository implements IUserRepository {
         phone_number: data.phoneNumber ?? null,
         address: data.address ?? null,
         govt_id: data.govtId,
+        refreshToken: data.refreshToken,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

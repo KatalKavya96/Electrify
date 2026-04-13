@@ -56,6 +56,7 @@ export class AuthService {
         ...registerUserDto,
         password: hashedPassword,
         govtId: govtIdURL.secure_url,
+        refreshToken: "" // Placeholder, will be updated after token generation
     })
 
     const tokens = this.generateTokens(Number(newUser.id));
