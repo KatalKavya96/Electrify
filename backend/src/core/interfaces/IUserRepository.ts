@@ -1,5 +1,7 @@
 import { UserEntity } from '../entities/User.entity.js';
+import type { UserRole } from '../entities/User.entity.js';
 import type { RegisterUserdto, UpdateUserdto } from '../../application/dtos/User.dto.js';
+import { Role } from '@prisma/client';
 
 export interface IUserRepository {
     findById(id: string): Promise<UserEntity | null>;
@@ -12,4 +14,5 @@ export interface IUserRepository {
     findAuthByEmail(email: string): Promise<{ user: UserEntity; hashedPassword: string; } | null>;
     findAuthByPhone(phoneNumber: string): Promise<{ user: UserEntity; hashedPassword: string; } | null>;
     getRefreshTokenById(id: string): Promise<string | null>;
+    assignRole(user_id: string, role: Role): Promise<UserRole | null>;
 }

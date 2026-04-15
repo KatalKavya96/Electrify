@@ -23,7 +23,7 @@ export class AuthService {
     user: UserEntity;
     tokens: { accessToken: string; refreshToken: string };
   }> {
-    console.log("Starting registration process");
+    // console.log("Starting registration process");
     if (registerUserDto.email) {
       const emailExists = await this.userRepository.findByEmail(
         registerUserDto.email,
