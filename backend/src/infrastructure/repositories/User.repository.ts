@@ -1,11 +1,12 @@
 import type { IUserRepository } from "../../core/interfaces/IUserRepository.js";
-import type { User } from "@prisma/client";
 import DatabaseClient from "../database/prisma.client.js";
 import { UserEntity } from "../../core/entities/User.entity.js";
+import type { UserRole } from "../../core/entities/User.entity.js";
 import type {
   RegisterUserdto,
   UpdateUserdto,
 } from "../../application/dtos/User.dto.js";
+import { Role } from "@prisma/client";
 
 export class UserRepository implements IUserRepository {
   private prisma = DatabaseClient.getInstance();
@@ -73,22 +74,31 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async create(data: Omit<RegisterUserdto, "govtId"> & { govtId: string, refreshToken: string }): Promise<UserEntity> {
-    const user = await this.prisma.user.create({
+  async create(
+    data: Omit<RegisterUserdto, "govt_id"> & {
+      govt_id: string;
+      refreshToken: string;
+    },
+  ): Promise<UserEntity> {
+    const user = await this.prisma.$transaction(async (prisma) => {
+    const newUser = await prisma.user.create({
       data: {
         user_id: crypto.randomUUID(),
-        first_name: data.firstName,
-        last_name: data.lastName ?? null,
+        first_name: data.first_name,
+        last_name: data.last_name ?? null,
         email: data.email ?? null,
         password: data.password,
-        phone_number: data.phoneNumber ?? null,
+        phone_number: data.phone_number ?? null,
         address: data.address ?? null,
-        govt_id: data.govtId,
+        govt_id: data.govt_id,
         refreshToken: data.refreshToken,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
+    await this.assignRole(newUser.user_id, Role.CUSTOMER); // Assign default role
+    return newUser;
+  });
     return new UserEntity(
       user.user_id,
       user.first_name,
@@ -102,7 +112,10 @@ export class UserRepository implements IUserRepository {
     );
   }
 
-  async update(id: string, data: UpdateUserdto): Promise<UserEntity | null> {
+  async update(
+    id: string,
+    data: Omit<UpdateUserdto, "govt_id"> | { govt_id: string },
+  ): Promise<UserEntity | null> {
     // console.log("Updating user with ID:", id, "and data:", data);
     // const existingUser = await this.prisma.user.findUnique({
     //   where: {
@@ -124,8 +137,8 @@ export class UserRepository implements IUserRepository {
         user.user_id,
         user.first_name,
         user?.last_name,
-        user?.email,
         user?.phone_number,
+        user?.email,
         user?.address,
         user.govt_id,
         user.createdAt,
@@ -182,7 +195,9 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async findAuthByEmail(email: string): Promise<{ user: UserEntity; hashedPassword: string; } | null> {
+  async findAuthByEmail(
+    email: string,
+  ): Promise<{ user: UserEntity; hashedPassword: string } | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: email,
@@ -201,14 +216,16 @@ export class UserRepository implements IUserRepository {
           user.createdAt,
           user.updatedAt,
         ),
-        hashedPassword: user.password
+        hashedPassword: user.password,
       };
     } else {
       return null;
     }
   }
 
-  async findAuthByPhone(phoneNumber: string): Promise<{ user: UserEntity; hashedPassword: string; } | null> {
+  async findAuthByPhone(
+    phoneNumber: string,
+  ): Promise<{ user: UserEntity; hashedPassword: string } | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         phone_number: phoneNumber,
@@ -227,7 +244,7 @@ export class UserRepository implements IUserRepository {
           user.createdAt,
           user.updatedAt,
         ),
-        hashedPassword: user.password
+        hashedPassword: user.password,
       };
     } else {
       return null;
@@ -244,5 +261,19 @@ export class UserRepository implements IUserRepository {
       },
     });
     return user?.refreshToken ?? null;
+  }
+
+  async assignRole(user_id: string, role: Role): Promise<UserRole | null> {
+    const userRole = await this.prisma.userRole.create({
+      data: {
+        user_id,
+        role,
+      },
+    });
+
+    return {
+      user_id: userRole.user_id,
+      role: userRole.role,
+    }
   }
 }
