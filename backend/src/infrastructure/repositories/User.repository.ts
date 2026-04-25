@@ -7,6 +7,7 @@ import type {
   UpdateUserdto,
 } from "../../application/dtos/User.dto.js";
 import { Role } from "@prisma/client";
+import type { DBTransactionClient } from "../../shared/types/prisma/index.js";
 
 export class UserRepository implements IUserRepository {
   private prisma = DatabaseClient.getInstance();
@@ -28,6 +29,7 @@ export class UserRepository implements IUserRepository {
         user.govt_id,
         user.createdAt,
         user.updatedAt,
+        user.isDeleted
       );
     } else {
       return null;
@@ -35,10 +37,13 @@ export class UserRepository implements IUserRepository {
   }
 
   async delete(id: string): Promise<UserEntity | null> {
-    const user = await this.prisma.user.delete({
+    const user = await this.prisma.user.update({
       where: {
         user_id: id,
       },
+      data: {
+        isDeleted: true
+      }
     });
     if (user) {
       return new UserEntity(
@@ -51,6 +56,7 @@ export class UserRepository implements IUserRepository {
         user.govt_id,
         user.createdAt,
         user.updatedAt,
+        user.isDeleted
       );
     } else {
       return null;
@@ -70,6 +76,7 @@ export class UserRepository implements IUserRepository {
         user.govt_id,
         user.createdAt,
         user.updatedAt,
+        user.isDeleted
       );
     });
   }
@@ -109,6 +116,7 @@ export class UserRepository implements IUserRepository {
       user.govt_id,
       user.createdAt,
       user.updatedAt,
+      user.isDeleted
     );
   }
 
@@ -143,6 +151,7 @@ export class UserRepository implements IUserRepository {
         user.govt_id,
         user.createdAt,
         user.updatedAt,
+        user.isDeleted
       );
     } else {
       return null;
@@ -166,6 +175,7 @@ export class UserRepository implements IUserRepository {
         user.govt_id,
         user.createdAt,
         user.updatedAt,
+        user.isDeleted
       );
     } else {
       return null;
@@ -189,6 +199,7 @@ export class UserRepository implements IUserRepository {
         user.govt_id,
         user.createdAt,
         user.updatedAt,
+        user.isDeleted
       );
     } else {
       return null;
@@ -215,6 +226,7 @@ export class UserRepository implements IUserRepository {
           user.govt_id,
           user.createdAt,
           user.updatedAt,
+          user.isDeleted
         ),
         hashedPassword: user.password,
       };
@@ -243,6 +255,7 @@ export class UserRepository implements IUserRepository {
           user.govt_id,
           user.createdAt,
           user.updatedAt,
+          user.isDeleted
         ),
         hashedPassword: user.password,
       };
@@ -263,8 +276,9 @@ export class UserRepository implements IUserRepository {
     return user?.refreshToken ?? null;
   }
 
-  async assignRole(user_id: string, role: Role): Promise<UserRole | null> {
-    const userRole = await this.prisma.userRole.create({
+  async assignRole(user_id: string, role: Role, tx?: DBTransactionClient): Promise<UserRole | null> {
+    const client = tx || this.prisma;
+    const userRole = await client.userRole.create({
       data: {
         user_id,
         role,
@@ -275,5 +289,15 @@ export class UserRepository implements IUserRepository {
       user_id: userRole.user_id,
       role: userRole.role,
     }
+  }
+
+  async getUserRole(user_id: string, tx?: DBTransactionClient): Promise<Role[]> {
+      const client = tx || this.prisma;
+      const userRoles = await client.userRole.findMany({
+        where: {
+          user_id
+        }
+      })
+      return userRoles.map((userRole: { role: Role }) => userRole.role)
   }
 }

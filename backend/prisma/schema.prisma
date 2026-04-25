@@ -71,6 +71,11 @@ enum InviteStatus {
   REJECTED
 }
 
+enum StationMemberRole {
+  OWNER
+  MANAGER
+}
+
 // ================= USER =================
 
 model User {
@@ -87,6 +92,8 @@ model User {
   govt_id      String   @unique @db.VarChar(100)
   password     String   @db.VarChar(255)
   refreshToken String?   @db.Text
+
+  isDeleted    Boolean  @default(false)
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -106,9 +113,6 @@ model User {
   sentNotifications     Notification[] @relation("Sender")
   receivedNotifications Notification[] @relation("Receiver")
 
-  // Station Requests
-  stationRequests StationRequest[]
-
   // Manager Invites
   ownedInvites   ManagerInvite[]        // owner side
   managerInvites ManagerInvite[] @relation("ManagerInvites")
@@ -116,6 +120,13 @@ model User {
   // Manager Join Requests
   ownerRequests ManagerJoinRequest[] @relation("OwnerRequests")
   userRequests  ManagerJoinRequest[] @relation("UserRequests")
+
+  // Station Requests 
+  stationsRequested StationRequest[] @relation("StationOwner")
+  reviewedStations  StationRequest[] @relation("StationReviewer")
+
+  // Station Members
+  stationMembers StationMember[]
 }
 
 // ================= USER ROLES =================
@@ -169,7 +180,11 @@ model Station {
   managerInvites   ManagerInvite[]
   managerRequests  ManagerJoinRequest[]
 
+  // Station Members
+  stationMembers StationMember[]
+
   @@index([owner_id])
+  @@unique([owner_id, name])
 }
 
 // ================= MACHINE =================
@@ -185,6 +200,8 @@ model Machine {
 
   minimum_fee Float
   fee_per_hour Float
+
+  isDeleted    Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -267,6 +284,8 @@ model Notification {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  isDeleted    Boolean  @default(false)
+
   // Relations
   sender   User  @relation("Sender", fields: [sender_id], references: [user_id])
   receiver User? @relation("Receiver", fields: [receiver_id], references: [user_id])
@@ -303,9 +322,11 @@ model StationRequest {
   updatedAt DateTime @updatedAt
 
   // Relations
-  owner User @relation(fields: [owner_id], references: [user_id])
+  owner User @relation("StationOwner", fields: [owner_id], references: [user_id])
+  reviewer User? @relation("StationReviewer", fields: [reviewed_by], references: [user_id])
 
   @@index([owner_id])
+  @@unique([owner_id, station_name])
 }
 
 // ================= MANAGER INVITES =================
@@ -348,6 +369,26 @@ model ManagerJoinRequest {
   station Station @relation(fields: [station_id], references: [station_id], onDelete: Cascade)
   owner   User    @relation("OwnerRequests", fields: [owner_id], references: [user_id])
   user    User    @relation("UserRequests", fields: [user_id], references: [user_id])
+
+  @@index([station_id])
+  @@index([user_id])
+}
+
+// ================= STATION MEMBER =================
+
+model StationMember {
+  member_id String @id @default(uuid()) @db.VarChar(36)
+
+  station_id String
+  user_id    String
+  role       StationMemberRole
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  station Station @relation(fields: [station_id], references: [station_id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [user_id])
 
   @@index([station_id])
   @@index([user_id])
