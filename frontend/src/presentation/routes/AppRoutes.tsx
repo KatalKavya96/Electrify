@@ -10,6 +10,7 @@ import StationListPage from "../pages/StationListPage";
 import StationDetailsPage from "../pages/StationDetailsPage";
 import BookingPage from "../pages/BookingPage";
 import MyBookingsPage from "../pages/MyBookingsPage";
+import SupportPage from "../pages/SupportPage";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import RoleRoute from "./RoleRoute";
 import { useAuth } from "../context/AuthContext";
@@ -151,6 +152,15 @@ export default function AppRoutes() {
               <RoleRoute allowedRoles={["SUPERADMIN"]}>
                 <SuperAdminRequestsPage />
               </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/support"
+          element={
+            <ProtectedRoute>
+              <SupportPage />
             </ProtectedRoute>
           }
         />

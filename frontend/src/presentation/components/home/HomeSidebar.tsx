@@ -1,6 +1,7 @@
 import type React from "react";
 import {
   CalendarClock,
+  HelpCircle,
   Home,
   LayoutDashboard,
   LogOut,
@@ -75,6 +76,12 @@ const navItems: NavItem[] = [
     label: "Settings",
     icon: Settings,
     path: "/profile",
+    roles: ["CUSTOMER", "OWNER", "MANAGER", "SUPERADMIN"],
+  },
+  {
+    label: "Support",
+    icon: HelpCircle,
+    path: "/support",
     roles: ["CUSTOMER", "OWNER", "MANAGER", "SUPERADMIN"],
   },
 ];
