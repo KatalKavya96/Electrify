@@ -53,7 +53,7 @@ export default function FaqPage() {
                 {FAQS.map((faq, index) => (
                   <div
                     key={faq.question}
-                    className="rounded-2xl border border-white/10 bg-white/3"
+                    className={`rounded-2xl border border-white/10 bg-white/3 transition ${openIndex === index ? "shadow-[0_18px_40px_rgba(8,16,32,0.35)]" : ""}`}
                   >
                     <button
                       type="button"
@@ -61,15 +61,21 @@ export default function FaqPage() {
                       className="flex w-full items-center justify-between gap-4 p-4 text-left"
                     >
                       <span className="text-sm font-semibold text-slate-200">{faq.question}</span>
-                      <ChevronDown
-                        className={`h-5 w-5 text-slate-500 transition ${openIndex === index ? "rotate-180" : ""}`}
-                      />
+                      <span className={`flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 ${openIndex === index ? "bg-cyan-500/15 text-cyan-300" : "bg-white/5 text-slate-400"}`}>
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform ${openIndex === index ? "rotate-180" : ""}`}
+                        />
+                      </span>
                     </button>
-                    {openIndex === index && (
-                      <div className="border-t border-white/10 px-4 pb-4 text-sm text-slate-400">
-                        {faq.answer}
+                    <div
+                      className={`grid transition-all duration-300 ${openIndex === index ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="border-t border-white/10 px-4 pb-4 text-sm text-slate-400">
+                          {faq.answer}
+                        </div>
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
