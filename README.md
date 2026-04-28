@@ -17,30 +17,30 @@ The system is built with a scalable modular architecture, ensuring high availabi
 
 ---
 
-## 🚀 Core Features
+## Core Features
 
-### 👤 User Personas & Management
+### User Personas & Management
 - **Role-Based Access**: Specialized interfaces for Customers, Station Owners, Managers, and Superadmins.
 - **Secure Auth**: JWT-based authentication with access and refresh token rotation.
 - **Profile Tracking**: Management of user credentials, contact info, and verification documents.
 
-### 🔋 Station & Machine Control
+### Station & Machine Control
 - **Dynamic Station Registration**: Owners can register new charging stations with location data (Geo-coordinates) and helpline details.
 - **Machine Granularity**: Track individual charging machines, their types, licensing info, and hourly charging fees.
 - **Operational Status**: Real-time tracking of station availability (Active, Maintenance, Closed).
 
-### 📅 Booking & Schedules
+### Booking & Schedules
 - **Flexible Booking Modes**: Support for Pre-booking, Walk-in customers, and Internal Maintenance slots.
 - **Status Lifecycle**: End-to-end tracking from Pending to In-progress, Completed, or Cancelled.
 - **Conflict Prevention**: Intelligent slot management to prevent overbooking on specific machines.
 
-### 💳 Payments & Notifications
+### Payments & Notifications
 - **Multi-Mode Payments**: Integrated tracking for UPI, Credit/Debit Cards, Net Banking, and Cash.
 - **Automated Alerts**: Real-time notifications via Push, Email, or SMS for booking confirmations and system updates.
 
 ---
 
-## 🏗️ Architecture Breakdown
+## Architecture Breakdown
 
 The project follows a **Clean Architecture** pattern, separating concerns into distinct layers:
 
@@ -93,7 +93,7 @@ SD_Group_Project/
 ```
 
 ---
-## 📚 Documentation
+## Documentation
 
 - Environment Configuration (dotenv setup & validation) → [Link to Env Config Doc](/docs/backend/env-config.md)
 - Database Client (Prisma Singleton Pattern) → [Link to Database Client Doc](/docs/backend/database-client.md)
