@@ -153,6 +153,24 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
+
+                  <div className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
+                    <h3 className="text-lg font-semibold">Response timeline</h3>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-400">
+                      <li className="flex items-center justify-between">
+                        <span>General inquiries</span>
+                        <span className="text-slate-200">&lt; 24 hrs</span>
+                      </li>
+                      <li className="flex items-center justify-between">
+                        <span>Billing issues</span>
+                        <span className="text-slate-200">&lt; 12 hrs</span>
+                      </li>
+                      <li className="flex items-center justify-between">
+                        <span>On-site outages</span>
+                        <span className="text-slate-200">&lt; 2 hrs</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </section>
