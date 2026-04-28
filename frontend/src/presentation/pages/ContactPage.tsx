@@ -44,10 +44,18 @@ export default function ContactPage() {
 
             <section className="mt-6 space-y-6">
               <header className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400/80">
-                  Contact
-                </p>
-                <h1 className="mt-2 text-3xl font-bold">We are here to help</h1>
+                <div className="flex flex-wrap items-center gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400/80">
+                    Contact
+                  </p>
+                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
+                    Avg response: 6 hrs
+                  </span>
+                  <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+                    99.2% uptime
+                  </span>
+                </div>
+                <h1 className="mt-3 text-3xl font-bold">We are here to help</h1>
                 <p className="mt-2 max-w-2xl text-sm text-slate-400">
                   Reach out to our support crew for quick troubleshooting, billing questions, or station guidance. We respond within 24 hours on business days.
                 </p>
@@ -59,7 +67,7 @@ export default function ContactPage() {
                   return (
                     <div
                       key={channel.title}
-                      className="rounded-3xl border border-white/10 bg-white/3 p-5 transition hover:bg-white/6"
+                      className="rounded-3xl border border-white/10 bg-white/3 p-5 transition hover:bg-white/6 hover:shadow-[0_20px_60px_rgba(8,16,32,0.35)]"
                     >
                       <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${channel.bg} ${channel.accent}`}>
                         <Icon className="h-6 w-6" />
@@ -78,6 +86,7 @@ export default function ContactPage() {
                   <p className="mt-1 text-sm text-slate-400">Tell us how we can assist you with your charging journey.</p>
 
                   <form className="mt-5 grid gap-4">
+                    <div className="h-px w-full bg-white/5" />
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label className="text-xs font-semibold text-slate-500">Full name</label>
