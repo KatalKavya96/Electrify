@@ -4,6 +4,7 @@ import { StationRequestEntity } from "../../core/entities/StationRequest.entity.
 import type { CreateRequestdto, UpdateRequestdto } from "../../application/dtos/StationRequest.dto.js";
 import { RequestStatus } from "@prisma/client";
 import type { DBTransactionClient } from "../../shared/types/prisma/index.js";
+import { randomUUID } from "crypto";
 
 export class StationRequestRepository implements IStationRequestRepository {
     private prisma = DatabaseClient.getInstance();
@@ -95,7 +96,7 @@ export class StationRequestRepository implements IStationRequestRepository {
         // console.log(documents);
         const request = await this.prisma.stationRequest.create({
             data: {
-                request_id: crypto.randomUUID(),
+                request_id: randomUUID(),
                 ...data,
                 status: "PENDING",
                 documents,

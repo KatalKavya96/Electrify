@@ -7,6 +7,7 @@ dotenv.config();
 
 const defaultCorsOrigins = [
   "http://localhost:5173",
+  "http://localhost:5174",
   "http://localhost:3000",
   "https://electrify.1forge.in",
   "https://electrifylive.1forge.in",
