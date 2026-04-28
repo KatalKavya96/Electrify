@@ -11,6 +11,7 @@ import StationDetailsPage from "../pages/StationDetailsPage";
 import BookingPage from "../pages/BookingPage";
 import MyBookingsPage from "../pages/MyBookingsPage";
 import SupportPage from "../pages/SupportPage";
+import ContactPage from "../pages/ContactPage";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import RoleRoute from "./RoleRoute";
 import { useAuth } from "../context/AuthContext";
@@ -161,6 +162,15 @@ export default function AppRoutes() {
           element={
             <ProtectedRoute>
               <SupportPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <ContactPage />
             </ProtectedRoute>
           }
         />
