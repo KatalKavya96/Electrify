@@ -43,15 +43,15 @@ export default function ContactPage() {
             <HomeHeader />
 
             <section className="mt-6 space-y-6">
-              <header className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
+              <header className="rounded-2xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
                 <div className="flex flex-wrap items-center gap-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400/80">
                     Contact
                   </p>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
+                  <span className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
                     Avg response: 6 hrs
                   </span>
-                  <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+                  <span className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
                     99.2% uptime
                   </span>
                 </div>
@@ -67,9 +67,9 @@ export default function ContactPage() {
                   return (
                     <div
                       key={channel.title}
-                      className="rounded-3xl border border-white/10 bg-white/3 p-5 transition hover:bg-white/6 hover:shadow-[0_20px_60px_rgba(8,16,32,0.35)]"
+                      className="rounded-2xl border border-white/10 bg-white/3 p-5 transition hover:bg-white/6 hover:shadow-[0_20px_60px_rgba(8,16,32,0.35)]"
                     >
-                      <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${channel.bg} ${channel.accent}`}>
+                      <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${channel.bg} ${channel.accent}`}>
                         <Icon className="h-6 w-6" />
                       </div>
                       <h3 className="text-lg font-semibold text-white">{channel.title}</h3>
@@ -81,7 +81,7 @@ export default function ContactPage() {
               </div>
 
               <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                <div className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
+                <div className="rounded-2xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
                   <h2 className="text-xl font-bold">Send a message</h2>
                   <p className="mt-1 text-sm text-slate-400">Tell us how we can assist you with your charging journey.</p>
 
@@ -93,7 +93,7 @@ export default function ContactPage() {
                         <input
                           type="text"
                           placeholder="Jane Doe"
-                          className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10"
+                          className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10"
                         />
                       </div>
                       <div>
@@ -101,14 +101,14 @@ export default function ContactPage() {
                         <input
                           type="email"
                           placeholder="jane@domain.com"
-                          className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10"
+                          className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10"
                         />
                       </div>
                     </div>
 
                     <div>
                       <label className="text-xs font-semibold text-slate-500">Topic</label>
-                      <select className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10">
+                      <select className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-black/30 px-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10">
                         <option>Charging issue</option>
                         <option>Billing question</option>
                         <option>Station feedback</option>
@@ -121,13 +121,13 @@ export default function ContactPage() {
                       <textarea
                         rows={5}
                         placeholder="Describe your issue in detail."
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 p-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10 placeholder:text-slate-600"
+                        className="mt-2 w-full rounded-lg border border-white/10 bg-black/30 p-4 text-sm text-white outline-none focus:border-cyan-500/60 focus:ring-4 focus:ring-cyan-500/10 placeholder:text-slate-600"
                       />
                     </div>
 
                     <button
                       type="button"
-                      className="flex h-11 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-cyan-600 to-blue-600 text-sm font-semibold text-white transition hover:scale-[1.02]"
+                      className="flex h-11 items-center justify-center gap-2 rounded-lg bg-linear-to-r from-cyan-600 to-blue-600 text-sm font-semibold text-white transition hover:scale-[1.02]"
                     >
                       <Send className="h-4 w-4" />
                       Send message
@@ -136,9 +136,9 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <div className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
+                  <div className="rounded-2xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
                     <div className="flex items-start gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/5 text-cyan-400">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/5 text-cyan-400">
                         <Clock className="h-5 w-5" />
                       </div>
                       <div>
@@ -149,9 +149,9 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
+                  <div className="rounded-2xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
                     <div className="flex items-start gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-300">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-300">
                         <ShieldCheck className="h-5 w-5" />
                       </div>
                       <div>
@@ -163,7 +163,7 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
+                  <div className="rounded-2xl border border-white/10 bg-white/4 p-6 backdrop-blur-xl">
                     <h3 className="text-lg font-semibold">Response timeline</h3>
                     <ul className="mt-3 space-y-2 text-sm text-slate-400">
                       <li className="flex items-center justify-between">
