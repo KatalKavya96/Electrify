@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import type { IStationRepository } from "../../core/interfaces/IStationRepository.js";
 import DatabaseClient from "../database/prisma.client.js";
 import { StationEntity } from "../../core/entities/Station.entity.js";
