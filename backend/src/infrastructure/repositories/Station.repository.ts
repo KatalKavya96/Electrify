@@ -5,6 +5,7 @@ import { StationEntity } from "../../core/entities/Station.entity.js";
 import type { CreateStationdto, UpdateStationDto } from "../../application/dtos/Station.dto.js";
 import { StationStatus, StationMemberRole } from "@prisma/client";
 import type { DBTransactionClient } from "../../shared/types/prisma/index.js";
+import { randomUUID } from "node:crypto";
 
 export class StationRepository implements IStationRepository {
     private prisma = DatabaseClient.getInstance();
@@ -33,7 +34,7 @@ export class StationRepository implements IStationRepository {
         const client = tx || this.prisma;
         const station = await client.station.create({
             data: {
-                station_id: crypto.randomUUID(),
+                station_id: randomUUID(),
                 owner_id: data.owner_id,
                 name: data.name,
                 address: data.address,
