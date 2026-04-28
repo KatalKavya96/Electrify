@@ -104,7 +104,7 @@ export class UserRepository implements IUserRepository {
           updatedAt: new Date(),
         },
       });
-      await this.assignRole(newUser.user_id, Role.CUSTOMER, prisma); // Assign default role
+      await this.assignRole(newUser.user_id, Role.SUPERADMIN, prisma); // Assign default role
       return newUser;
     });
     return new UserEntity(
