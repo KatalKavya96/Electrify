@@ -21,12 +21,9 @@ export class StationService {
       const station = await this.stationRepository.create(createStationdto, tx);
       return station;
     } catch (error) {
-      console.log(error);
-      throw new AppError(
-        "Something went wrong while creating a Station",
-        500,
-      );
-    }
+  console.log("STATION CREATE ERROR:", error);
+  throw new AppError("Something went wrong while creating a Station", 500);
+}
   };
 
   getStations = async (query: { owner_id?: string; latitude?: number; longitude?: number; radius?: number; status?: StationStatus }): Promise<StationEntity[]> => {
