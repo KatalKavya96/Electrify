@@ -38,18 +38,25 @@ export class AuthMiddleware {
 
       next();
     } catch (error) {
-      throw new AppError("Invalid Access Token", 401);
+      next(new AppError("Invalid Access Token", 401));
     }
   }
 
   verifySuperAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    const user = req?.user;
-    const roles = await this.userRepository.getUserRole(user?.user_id!)
-    if(roles.includes("SUPERADMIN")) {
+    try {
+      const user = req?.user;
+
+      if (!user || !user.user_id) {
+        throw new AppError("Unauthorized", 401);
+      }
+
+      if ((user as any).role !== "SUPERADMIN") {
+        throw new AppError("Only accessible for SuperAdmin", 401);
+      }
+
       next()
-    }
-    else {
-      throw new AppError("Only accessible for SuperAdmin", 401)
+    } catch (error) {
+      next(error)
     }
   }
 
@@ -58,6 +65,11 @@ export class AuthMiddleware {
       try {
         if (!req.user || !req.user.user_id) {
           throw new AppError("Unauthorized", 401);
+        }
+
+        if ((req.user as any).role === "SUPERADMIN") {
+          next();
+          return;
         }
 
         const station_id = req.params.station_id || req.params.id;
