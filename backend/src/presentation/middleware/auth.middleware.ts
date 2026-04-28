@@ -17,81 +17,126 @@ export class AuthMiddleware {
 
   authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
-    const token =
-      req.cookies?.accessToken ||
-      req.header("Authorization")?.replace("Bearer ", "");
-      // console.log(req.cookies);
+      const token =
+        req.cookies?.accessToken ||
+        req.header("Authorization")?.replace("Bearer ", "");
+
       if (!token) {
         throw new AppError("Invalid credentials", 401);
       }
-      
-      const decodedToken = jwt.verify(token, config.jwt.secret) as JwtPayload;
-      const user = await this.userRepository.findById(decodedToken.user_id);
-    // console.log("Decoded token:", decodedToken);
-    // console.log("Authenticated user:", user);
+
+      const decodedToken = jwt.verify(
+        token,
+        config.jwt.secret
+      ) as JwtPayload;
+
+      const user = await this.userRepository.findById(
+        decodedToken.user_id
+      );
 
       if (!user) {
         throw new AppError("Unauthorized", 401);
       }
 
       req.user = user;
-
       next();
+
     } catch (error) {
       next(new AppError("Invalid Access Token", 401));
     }
   }
 
-  verifySuperAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  verifySuperAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
-      const user = req?.user;
+      const user = req.user;
 
-      if (!user || !user.user_id) {
+      if (!user) {
         throw new AppError("Unauthorized", 401);
       }
 
-      if ((user as any).role !== "SUPERADMIN") {
-        throw new AppError("Only accessible for SuperAdmin", 401);
+      const roles = await this.userRepository.getUserRole(
+        user.user_id
+      );
+
+      if (!roles.includes("SUPERADMIN" as any)) {
+        throw new AppError(
+          "Only accessible for SuperAdmin",
+          401
+        );
       }
 
-      next()
+      next();
+
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
-  verifyStationRole = (allowedRoles: StationMemberRole[]) => {
-    return async (req: Request, _res: Response, next: NextFunction) => {
+  verifyStationRole = (
+    allowedRoles: StationMemberRole[]
+  ) => {
+    return async (
+      req: Request,
+      _res: Response,
+      next: NextFunction
+    ) => {
       try {
-        if (!req.user || !req.user.user_id) {
+        if (!req.user) {
           throw new AppError("Unauthorized", 401);
         }
 
-        if ((req.user as any).role === "SUPERADMIN") {
+        const globalRoles =
+          await this.userRepository.getUserRole(
+            req.user.user_id
+          );
+
+        if (
+          globalRoles.includes("SUPERADMIN" as any)
+        ) {
           next();
           return;
         }
 
-        const station_id = req.params.station_id || req.params.id;
+        const station_id = String(req.params.station_id || req.params.id);
 
         if (!station_id) {
-          throw new AppError("Station ID is required for role verification", 400);
+          throw new AppError(
+            "Station ID is required for role verification",
+            400
+          );
         }
 
         const prisma = DatabaseClient.getInstance();
-        const membership = await prisma.stationMember.findFirst({
-          where: {
-            station_id: station_id as string,
-            user_id: req.user.user_id,
-          },
-        });
 
-        if (!membership || !allowedRoles.includes(membership.role as any)) {
-          throw new AppError("Forbidden: Insufficient privileges for this station", 403);
+        const membership =
+          await prisma.stationMember.findFirst({
+            where: {
+              station_id,
+              user_id: req.user.user_id,
+            },
+          });
+
+        if (
+          !membership ||
+          !allowedRoles.includes(
+            membership.role as any
+          )
+        ) {
+          throw new AppError(
+            "Forbidden: Insufficient privileges for this station",
+            403
+          );
         }
 
-        req.stationMemberRole = membership.role as any;
+        req.stationMemberRole =
+          membership.role as any;
+
         next();
+
       } catch (error) {
         next(error);
       }
